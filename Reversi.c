@@ -1,6 +1,6 @@
 #include "menu.h"
 
 int main(int argc, char const *argv[]) {
-  showMenu();
+  drawMenu();
   return 0;
 }
