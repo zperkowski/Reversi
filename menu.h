@@ -2,6 +2,24 @@
 #include "string.h"
 #include "window.h"
 
+#ifdef __linux__
+#include <termios.h>
+#include <unistd.h>
+
+int getch(void)
+{
+    struct termios oldattr, newattr;
+    int ch;
+    tcgetattr( STDIN_FILENO, &oldattr );
+    newattr = oldattr;
+    newattr.c_lflag &= ~( ICANON | ECHO );
+    tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
+    ch = getchar();
+    tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
+    return ch;
+}
+#endif
+
 struct windowSize windowSize;
 
 char *menu_play_unmarked = "[ ] Play";
@@ -79,23 +97,51 @@ void drawMenu() {
     }
 }
 
-int menu() {
-  option_choosen = 0;
-  while (option_choosen == 0) {
-    drawMenu();
-    switch (getch()) {
-      case 72:
-        if (option_marked > 0)
-          option_marked--;
-        break;
-      case 80:
-        if (option_marked < 4)
-          option_marked++;
-        break;
-      case '\r':
-        option_choosen = 1;
-        break;
+#ifdef _WIN32
+  int menu() {
+    option_choosen = 0;
+    while (option_choosen == 0) {
+      drawMenu();
+      switch (getch()) {
+        case 72:
+          if (option_marked > 0)
+            option_marked--;
+          break;
+        case 80:
+          if (option_marked < 4)
+            option_marked++;
+          break;
+        case '\r':
+          option_choosen = 1;
+          break;
+      }
     }
+    return option_marked;
   }
-  return option_marked;
-}
+#elif __linux__
+  int menu() {
+    option_choosen = 0;
+    char in;
+    while (option_choosen == 0) {
+      drawMenu();
+      in = getch();
+      if (in == '\033') {
+        getch();
+        switch (getch()) {
+          case 'A':
+            if (option_marked > 0)
+              option_marked--;
+            break;
+          case 'B':
+            if (option_marked < 4)
+              option_marked++;
+            break;
+        }
+      } else {
+        if (in == '\n')
+          option_choosen = 1;
+      }
+    }
+    return option_marked;
+  }
+#endif
