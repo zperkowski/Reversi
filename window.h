@@ -8,6 +8,10 @@
   #include <unistd.h>
   #include <string.h> // Work without including on Windows
 
+  /**
+  * getWindowsSize() checks the width and height of the console and
+  * returns the struct windowSize. Linux version.
+  */
   struct windowSize getWindowSize() {
     struct winsize w;
     struct windowSize window;
@@ -19,6 +23,10 @@
   }
 
 #elif _WIN32
+/**
+* getWindowsSize() checks the width and height of the console and
+* returns the struct windowSize. Windows version.
+*/
 #include "windows.h"
   struct windowSize getWindowSize() {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -31,3 +39,14 @@
     return window;
   }
 #endif
+
+/**
+* It clears screen.
+* Tested on Linux. Should work on Windows.
+*/
+void scr_clr() {
+  struct windowSize windowSize = getWindowSize();
+  for (size_t i = 0; i < (windowSize.width*windowSize.height); i++) {
+    printf(" ");
+  }
+}

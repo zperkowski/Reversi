@@ -33,9 +33,16 @@ char *menu_mapSize_marked = "[X] Map size: ";
 char *menu_exit_unmarked = "[ ] Exit";
 char *menu_exit_marked = "[X] Exit";
 
+// Describes where the cursor in the menu() is set.
 int option_marked = 0;
+// Shows if Enter key was hit.
 int option_choosen = 0;
 
+/**
+* Prints text in the middle of console. Window size is returned from
+* getWindowSize() in window.h. Based on printf so it works
+* on Linux and Windows.
+*/
 void printCentered(char *text) {
   windowSize = getWindowSize(); // Updates the window size
   if (windowSize.width > strlen(text)) {
@@ -53,6 +60,7 @@ void printCentered(char *text) {
 }
 
 void drawMenu() {
+    scr_clr();
     // Title
     printCentered("Reversi\n");
     switch (option_marked) {
