@@ -1,7 +1,8 @@
-  struct windowSize {
-    int width;
-    int height;
-  };
+int i;
+struct windowSize {
+  int width;
+  int height;
+};
 
 #ifdef __linux__
   #include <sys/ioctl.h>
@@ -46,7 +47,7 @@
 */
 void scr_clr() {
   struct windowSize windowSize = getWindowSize();
-  for (size_t i = 0; i < (windowSize.width*windowSize.height); i++) {
+  for (i = 0; i < (windowSize.width*windowSize.height); i++) {
     printf(" ");
   }
 }
