@@ -152,4 +152,18 @@ void drawMenu() {
     }
     return option_marked;
   }
+
+  void drawNameChanger(int playerNumber, char *playerName) {
+    int error;
+    error = 0;
+    do {
+      scr_clr();
+      if (playerNumber == 1)
+        printCentered("Set new name for the first player:");
+      else if (playerNumber == 2)
+        printCentered("Set new name for the second player:");
+      scanf("%s", playerName);
+      printf("%s", playerName);
+    } while (error);
+  }
 #endif
