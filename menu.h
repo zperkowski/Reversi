@@ -2,6 +2,9 @@
 #include "string.h"
 #include "window.h"
 
+extern char player1_name[];
+extern char player2_name[];
+
 #ifdef __linux__
 #include <termios.h>
 #include <unistd.h>
@@ -47,7 +50,7 @@ void printCentered(char *text) {
   windowSize = getWindowSize(); // Updates the window size
   if (windowSize.width > strlen(text)) {
     int i;
-    int space = (windowSize.width - strlen(text)) / 2;
+    int space = (windowSize.width - strlen(text)-1) / 2;
     for (i = 0; i < space; i++)
       printf(" ");
     printf("%s", text);
@@ -67,35 +70,45 @@ void drawMenu() {
       case 0:
         printCentered(menu_play_marked);
         printCentered(menu_player1_unmarked);
+        printCentered(player1_name);
         printCentered(menu_player2_unmarked);
+        printCentered(player2_name);
         printCentered(menu_mapSize_unmarked);
         printCentered(menu_exit_unmarked);
         break;
       case 1:
         printCentered(menu_play_unmarked);
         printCentered(menu_player1_marked);
+        printCentered(player1_name);
         printCentered(menu_player2_unmarked);
+        printCentered(player2_name);
         printCentered(menu_mapSize_unmarked);
         printCentered(menu_exit_unmarked);
         break;
       case 2:
         printCentered(menu_play_unmarked);
         printCentered(menu_player1_unmarked);
+        printCentered(player1_name);
         printCentered(menu_player2_marked);
+        printCentered(player2_name);
         printCentered(menu_mapSize_unmarked);
         printCentered(menu_exit_unmarked);
         break;
       case 3:
         printCentered(menu_play_unmarked);
         printCentered(menu_player1_unmarked);
+        printCentered(player1_name);
         printCentered(menu_player2_unmarked);
+        printCentered(player2_name);
         printCentered(menu_mapSize_marked);
         printCentered(menu_exit_unmarked);
         break;
       case 4:
         printCentered(menu_play_unmarked);
         printCentered(menu_player1_unmarked);
+        printCentered(player1_name);
         printCentered(menu_player2_unmarked);
+        printCentered(player2_name);
         printCentered(menu_mapSize_unmarked);
         printCentered(menu_exit_marked);
         break;
@@ -152,18 +165,21 @@ void drawMenu() {
     }
     return option_marked;
   }
-
-  void drawNameChanger(int playerNumber, char *playerName) {
-    int error;
-    error = 0;
-    do {
-      scr_clr();
-      if (playerNumber == 1)
-        printCentered("Set new name for the first player:");
-      else if (playerNumber == 2)
-        printCentered("Set new name for the second player:");
-      scanf("%s", playerName);
-      printf("%s", playerName);
-    } while (error);
-  }
 #endif
+// TODO: Test on Linux
+void nameChanger(int playerNumber, char *playerName) {
+  scr_clr();
+  if (playerNumber == 1) {
+    printCentered("Set new name for the first player");
+    printCentered(player1_name);
+  }
+  else if (playerNumber == 2) {
+    printCentered("Set new name for the second player");
+    printCentered(player2_name);
+  }
+  printCentered("(Maximum length: 15)");
+  scanf("%15s", playerName);
+  // Clear a excess of the input
+  int c;
+  while ((c = getchar()) != EOF && c != '\n');
+}

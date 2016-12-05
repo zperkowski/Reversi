@@ -43,7 +43,7 @@ struct windowSize {
 
 /**
 * It clears screen.
-* Tested on Linux. Should work on Windows.
+* Tested on Linux and Windows.
 */
 void scr_clr() {
   struct windowSize windowSize = getWindowSize();
