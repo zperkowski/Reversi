@@ -4,6 +4,8 @@
 
 extern char player1_name[];
 extern char player2_name[];
+extern int mapSizeInt;
+extern char mapSizeString[3];
 
 #ifdef __linux__
 #include <termios.h>
@@ -74,6 +76,7 @@ void drawMenu() {
         printCentered(menu_player2_unmarked);
         printCentered(player2_name);
         printCentered(menu_mapSize_unmarked);
+        printCentered(mapSizeString);
         printCentered(menu_exit_unmarked);
         break;
       case 1:
@@ -83,6 +86,7 @@ void drawMenu() {
         printCentered(menu_player2_unmarked);
         printCentered(player2_name);
         printCentered(menu_mapSize_unmarked);
+        printCentered(mapSizeString);
         printCentered(menu_exit_unmarked);
         break;
       case 2:
@@ -92,6 +96,7 @@ void drawMenu() {
         printCentered(menu_player2_marked);
         printCentered(player2_name);
         printCentered(menu_mapSize_unmarked);
+        printCentered(mapSizeString);
         printCentered(menu_exit_unmarked);
         break;
       case 3:
@@ -101,6 +106,7 @@ void drawMenu() {
         printCentered(menu_player2_unmarked);
         printCentered(player2_name);
         printCentered(menu_mapSize_marked);
+        printCentered(mapSizeString);
         printCentered(menu_exit_unmarked);
         break;
       case 4:
@@ -110,6 +116,7 @@ void drawMenu() {
         printCentered(menu_player2_unmarked);
         printCentered(player2_name);
         printCentered(menu_mapSize_unmarked);
+        printCentered(mapSizeString);
         printCentered(menu_exit_marked);
         break;
       default:
@@ -182,4 +189,17 @@ void nameChanger(int playerNumber, char *playerName) {
   // Clear a excess of the input
   int c;
   while ((c = getchar()) != EOF && c != '\n');
+}
+
+void mapSizeChanger() {
+  scr_clr();
+  int tempMapSize;
+  do {
+    tempMapSize = 0;
+    printCentered("Choose map size");
+    printCentered("Write a digit between 4 and 20");
+    scanf("%d", &tempMapSize);
+  } while ((tempMapSize < 4) || (tempMapSize > 20));
+  mapSizeInt = tempMapSize;
+  itoa(mapSizeInt, mapSizeString, 10);
 }
