@@ -7,26 +7,6 @@ extern char player2_name[];
 extern int mapSizeInt;
 extern char mapSizeString[3];
 
-#ifdef __linux__
-#include <termios.h>
-#include <unistd.h>
-
-int getch(void)
-{
-    struct termios oldattr, newattr;
-    int ch;
-    tcgetattr( STDIN_FILENO, &oldattr );
-    newattr = oldattr;
-    newattr.c_lflag &= ~( ICANON | ECHO );
-    tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
-    ch = getchar();
-    tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
-    return ch;
-}
-#endif
-
-struct windowSize windowSize;
-
 char *menu_play_unmarked = "[ ] Play";
 char *menu_play_marked = "[X] Play";
 char *menu_player1_unmarked = "[ ] Player 1: ";
@@ -42,27 +22,6 @@ char *menu_exit_marked = "[X] Exit";
 int option_marked = 0;
 // Shows if Enter key was hit.
 int option_choosen = 0;
-
-/**
-* Prints text in the middle of console. Window size is returned from
-* getWindowSize() in window.h. Based on printf so it works
-* on Linux and Windows.
-*/
-void printCentered(char *text) {
-  windowSize = getWindowSize(); // Updates the window size
-  if (windowSize.width > strlen(text)) {
-    int i;
-    int space = (windowSize.width - strlen(text)-1) / 2;
-    for (i = 0; i < space; i++)
-      printf(" ");
-    printf("%s", text);
-    for (i = 0; i < space; i++)
-      printf(" ");
-  } else {
-    printf("%s", text);
-  }
-  printf("\n");
-}
 
 void drawMenu() {
     scr_clr();

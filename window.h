@@ -4,7 +4,11 @@ struct windowSize {
   int height;
 };
 
+
+struct windowSize windowSize;
+
 #ifdef __linux__
+  #include <termios.h>
   #include <sys/ioctl.h>
   #include <unistd.h>
   #include <string.h> // Work without including on Windows
@@ -21,6 +25,19 @@ struct windowSize {
     window.height = w.ws_row;
 
     return window;
+  }
+
+  int getch(void)
+  {
+      struct termios oldattr, newattr;
+      int ch;
+      tcgetattr( STDIN_FILENO, &oldattr );
+      newattr = oldattr;
+      newattr.c_lflag &= ~( ICANON | ECHO );
+      tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
+      ch = getchar();
+      tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
+      return ch;
   }
 
 #elif _WIN32
@@ -50,4 +67,25 @@ void scr_clr() {
   for (i = 0; i < (windowSize.width*windowSize.height); i++) {
     printf(" ");
   }
+}
+
+/**
+* Prints text in the middle of console. Window size is returned from
+* getWindowSize() in window.h. Based on printf so it works
+* on Linux and Windows.
+*/
+void printCentered(char *text) {
+  windowSize = getWindowSize(); // Updates the window size
+  if (windowSize.width > strlen(text)) {
+    int i;
+    int space = (windowSize.width - strlen(text)-1) / 2;
+    for (i = 0; i < space; i++)
+      printf(" ");
+    printf("%s", text);
+    for (i = 0; i < space; i++)
+      printf(" ");
+  } else {
+    printf("%s", text);
+  }
+  printf("\n");
 }
