@@ -5,7 +5,9 @@
 extern char player1_name[];
 extern char player2_name[];
 extern int mapSizeInt;
-extern char mapSizeString[3];
+extern char mapSizeString[];
+
+struct windowSize windowSize;
 
 char *menu_play_unmarked = "[ ] Play";
 char *menu_play_marked = "[X] Play";

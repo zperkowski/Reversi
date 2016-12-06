@@ -63,7 +63,7 @@ struct windowSize windowSize;
 * Tested on Linux and Windows.
 */
 void scr_clr() {
-  struct windowSize windowSize = getWindowSize();
+  windowSize = getWindowSize();
   for (i = 0; i < (windowSize.width*windowSize.height); i++) {
     printf(" ");
   }

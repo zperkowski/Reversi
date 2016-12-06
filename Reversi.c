@@ -1,4 +1,5 @@
 #include "menu.h"
+#include "game.h"
 
 char player1_name[16] = "Player 1";
 char player2_name[16] = "Player 2";
@@ -9,7 +10,7 @@ int main(int argc, char const *argv[]) {
   while (1) {
     switch (menu()) {
       case 0: // Play
-
+        playReversi();
         break;
       case 1: // Player 1
         nameChanger(1, player1_name);
