@@ -162,5 +162,11 @@ void mapSizeChanger() {
     scanf("%d", &tempMapSize);
   } while ((tempMapSize < 4) || (tempMapSize > 20));
   mapSizeInt = tempMapSize;
+  #ifdef _WIN32
   itoa(mapSizeInt, mapSizeString, 10);
+  #elif __linux__
+  sprintf(mapSizeString, "%d", mapSizeInt);
+  int c;
+  while ((c = getchar()) != EOF && c != '\n');
+  #endif
 }
