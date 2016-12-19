@@ -107,7 +107,7 @@ void drawMenu() {
     }
     return option_marked;
   }
-#elif __linux__
+#else // For Linux or macOS
   int menu() {
     option_choosen = 0;
     char in;
@@ -134,7 +134,7 @@ void drawMenu() {
     return option_marked;
   }
 #endif
-// TODO: Test on Linux
+
 void nameChanger(int playerNumber, char *playerName) {
   scr_clr();
   if (playerNumber == 1) {
@@ -151,7 +151,7 @@ void nameChanger(int playerNumber, char *playerName) {
   int c;
   while ((c = getchar()) != EOF && c != '\n');
 }
-
+// TODO: mapSizeChanger doens't work on macOS
 void mapSizeChanger() {
   scr_clr();
   int tempMapSize;

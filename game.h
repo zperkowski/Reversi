@@ -12,7 +12,7 @@ int** getBoard() {
     board[i] = (int*)calloc(mapSizeInt, sizeof(int));
   return board;
 }
-
+// TODO: Special ASCII characters doens't work on macOS
 char** getDrawableBoard(int** board) {
   scr_clr();
   char **drawableBoard = (char**)calloc(mapSizeInt*2+1, sizeof(char*));

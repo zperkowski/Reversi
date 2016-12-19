@@ -7,7 +7,24 @@ struct windowSize {
 
 struct windowSize windowSize;
 
-#ifdef __linux__
+#ifdef _WIN32
+/**
+* getWindowsSize() checks the width and height of the console and
+* returns the struct windowSize. Windows version.
+*/
+#include "windows.h"
+  struct windowSize getWindowSize() {
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    struct windowSize window;
+
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    window.width = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+    window.height = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+
+    return window;
+  }
+
+#else // For Linux or macOS
   #include <termios.h>
   #include <sys/ioctl.h>
   #include <unistd.h>
@@ -40,22 +57,7 @@ struct windowSize windowSize;
       return ch;
   }
 
-#elif _WIN32
-/**
-* getWindowsSize() checks the width and height of the console and
-* returns the struct windowSize. Windows version.
-*/
-#include "windows.h"
-  struct windowSize getWindowSize() {
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    struct windowSize window;
 
-    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-    window.width = csbi.srWindow.Right - csbi.srWindow.Left + 1;
-    window.height = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
-
-    return window;
-  }
 #endif
 
 /**
