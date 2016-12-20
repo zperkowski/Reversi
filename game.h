@@ -1,4 +1,35 @@
 #include "stdlib.h"
+// TODO: Test on Windows
+#ifdef _WIN32
+const char LEFT_TOP = 218;
+const char RIGHT_TOP = 191;
+const char LEFT_BOTTOM = 192;
+const char RIGHT_BOTTOM = 217;
+const char HORIZONTAL_LINE = 196;
+const char VERTICAL_LINE = 179;
+const char SYMBOL = 'X';
+const char EMPTY_SPACE = ' ';
+// TODO: Test on Linux
+#elif __linux__
+const char LEFT_TOP = 218;
+const char RIGHT_TOP = 191;
+const char LEFT_BOTTOM = 192;
+const char RIGHT_BOTTOM = 217;
+const char HORIZONTAL_LINE = 196;
+const char VERTICAL_LINE = 179;
+const char SYMBOL = 'X';
+const char EMPTY_SPACE = ' ';
+
+#else // For macOS
+const char LEFT_TOP = ' ';
+const char RIGHT_TOP = ' ';
+const char LEFT_BOTTOM = ' ';
+const char RIGHT_BOTTOM = ' ';
+const char HORIZONTAL_LINE = '-';
+const char VERTICAL_LINE = '|';
+const char SYMBOL = 'X';
+const char EMPTY_SPACE = ' ';
+#endif
 
 extern char player1_name[16];
 extern char player2_name[16];
@@ -22,28 +53,28 @@ char** getDrawableBoard(int** board) {
     for (j = 0; j < mapSizeInt*2+1; j++) {
       // Left top corner
       if ((i == 0) && (j == 0))
-        drawableBoard[i][j] = 218;
+        drawableBoard[i][j] = LEFT_TOP;
       // Right top corner
       else if ((i == 0) && (j == mapSizeInt*2))
-        drawableBoard[i][j] = 191;
+        drawableBoard[i][j] = RIGHT_TOP;
       // Left bottom corner
       else if ((i == mapSizeInt*2) && (j == 0))
-        drawableBoard[i][j] = 192;
+        drawableBoard[i][j] = LEFT_BOTTOM;
       // Right bottom corner
       else if ((i == mapSizeInt*2) && (j == mapSizeInt*2))
-        drawableBoard[i][j] = 217;
+        drawableBoard[i][j] = RIGHT_BOTTOM;
       // Top or bottom line
       else if (((i == 0) || (i == mapSizeInt*2)) &&
           ((j != 0) && (j != mapSizeInt*2)))
-        drawableBoard[i][j] = 196;
+        drawableBoard[i][j] = HORIZONTAL_LINE;
       // Left or right line
       else if (((i != 0) && (i != mapSizeInt*2)) &&
           ((j == 0) || (j == mapSizeInt*2)))
-        drawableBoard[i][j] = 179;
+        drawableBoard[i][j] = VERTICAL_LINE;
       else if ((i % 2 != 0 ) && (j % 2 != 0))
-        drawableBoard[i][j] = 'X';
+        drawableBoard[i][j] = SYMBOL;
       else
-        drawableBoard[i][j] = ' ';
+        drawableBoard[i][j] = EMPTY_SPACE;
     }
   }
   return drawableBoard;
