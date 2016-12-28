@@ -1,5 +1,5 @@
 #include "stdlib.h"
-// TODO: Test on Windows
+
 #ifdef _WIN32
 const char LEFT_TOP = 218;
 const char RIGHT_TOP = 191;
@@ -37,14 +37,14 @@ extern int mapSizeInt;
 extern char mapSizeString[3];
 int i, j;
 
-int** getBoard() {
+int** initBoard() {
   int **board = (int**)calloc(mapSizeInt, sizeof(int*));
   for (i = 0; i < mapSizeInt; i++)
     board[i] = (int*)calloc(mapSizeInt, sizeof(int));
   return board;
 }
-// TODO: Special ASCII characters doens't work on macOS
-char** getDrawableBoard(int** board) {
+
+char** initDrawableBoard(int **board) {
   scr_clr();
   char **drawableBoard = (char**)calloc(mapSizeInt*2+1, sizeof(char*));
   for (i = 0; i < mapSizeInt*2+1; i++)
@@ -98,11 +98,36 @@ void drawBoard(char **board) {
   }
 }
 
-// Test version of playReversi
+
 void playReversi() {
-  int **reversiBoard = getBoard();
-  char **reversiDrawableBoard = getDrawableBoard(reversiBoard);
+  int **reversiBoard = initBoard();
+  char **reversiDrawableBoard = initDrawableBoard(reversiBoard);
   drawBoard(reversiDrawableBoard);
+  char key;
+  while((key = readKey())) {
+    switch (key) {
+      case 'U': // Up
+
+        break;
+      case 'D': // Down
+
+        break;
+      case 'R': // Right
+
+        break;
+      case 'L': // Left
+
+        break;
+      case 'E': // Enter
+      case 'S': // Space
+
+        break;
+    }
+    if (key == 'Q') {
+      // Quit
+      break;
+    }
+  }
   deleteBoard(reversiBoard);
   deleteDrawableBoard(reversiDrawableBoard);
 }

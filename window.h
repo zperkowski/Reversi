@@ -56,8 +56,33 @@ struct windowSize windowSize;
       tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
       return ch;
   }
-
-
+// TODO: Test readKey on Linux
+// TODO: Write readKey for Windows
+  char readKey() {
+    char input;
+      input = getch();
+      if (input == '\033') {
+        getch();
+        switch (getch()) {
+          case 'A':
+            return 'U';
+          case 'B':
+            return 'D';
+          case 'C':
+            return 'R';
+          case 'D':
+            return 'L';
+        }
+      } else {
+        if (input == '\n')
+          return 'E';
+        else if (input == ' ')
+          return 'S';
+        else if (input == 'q' || input == 'Q')
+          return 'Q';
+      }
+    return '0';
+  }
 #endif
 
 /**
