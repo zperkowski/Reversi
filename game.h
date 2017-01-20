@@ -7,7 +7,8 @@ const char LEFT_BOTTOM = 192;
 const char RIGHT_BOTTOM = 217;
 const char HORIZONTAL_LINE = 196;
 const char VERTICAL_LINE = 179;
-const char SYMBOL = 'X';
+const char SYMBOL_1 = 'X';
+const char SYMBOL_2 = 'O';
 const char EMPTY_SPACE = ' ';
 // TODO: Test on Linux
 #elif __linux__
@@ -17,7 +18,8 @@ const char LEFT_BOTTOM = 192;
 const char RIGHT_BOTTOM = 217;
 const char HORIZONTAL_LINE = 196;
 const char VERTICAL_LINE = 179;
-const char SYMBOL = 'X';
+const char SYMBOL_1 = 'X';
+const char SYMBOL_2 = 'O';
 const char EMPTY_SPACE = ' ';
 
 #else // For macOS
@@ -27,7 +29,8 @@ const char LEFT_BOTTOM = ' ';
 const char RIGHT_BOTTOM = ' ';
 const char HORIZONTAL_LINE = '-';
 const char VERTICAL_LINE = '|';
-const char SYMBOL = 'X';
+const char SYMBOL_1 = 'X';
+const char SYMBOL_2 = 'O';
 const char EMPTY_SPACE = ' ';
 #endif
 
@@ -41,6 +44,14 @@ int** initBoard() {
   int **board = (int**)calloc(mapSizeInt, sizeof(int*));
   for (i = 0; i < mapSizeInt; i++)
     board[i] = (int*)calloc(mapSizeInt, sizeof(int));
+
+  // Initial first player's symbols
+  board[(mapSizeInt/2)-1][mapSizeInt/2] = 1;
+  board[mapSizeInt/2][(mapSizeInt/2)-1] = 1;
+
+  //Initial second player's symbols
+  board[mapSizeInt/2][mapSizeInt/2] = 2;
+  board[(mapSizeInt/2)-1][(mapSizeInt/2)-1] = 2;
   return board;
 }
 
@@ -72,11 +83,23 @@ char** initDrawableBoard(int **board) {
           ((j == 0) || (j == mapSizeInt*2)))
         drawableBoard[i][j] = VERTICAL_LINE;
       else if ((i % 2 != 0 ) && (j % 2 != 0))
-        drawableBoard[i][j] = SYMBOL;
+        drawableBoard[i][j] = EMPTY_SPACE;    // Space between playable fields
       else
-        drawableBoard[i][j] = EMPTY_SPACE;
+        drawableBoard[i][j] = EMPTY_SPACE;    // Playable fields
     }
   }
+
+  for (i = 0; i < mapSizeInt; i++) {
+    for (j = 0; j < mapSizeInt; j++) {
+      printf("i: %d j: %d\n", i, j);
+      if (board[i][j] == 1) {
+        drawableBoard[(i*2)+1][(j*2)+1] = SYMBOL_1;
+      } else if (board[i][j] == 2) {
+        drawableBoard[(i*2)+1][(j*2)+1] = SYMBOL_2;
+      }
+    }
+  }
+
   return drawableBoard;
 }
 
@@ -122,6 +145,9 @@ void playReversi() {
       case 'S': // Space
 
         break;
+     default:
+        reversiDrawableBoard = initDrawableBoard(reversiBoard);
+        drawBoard(reversiDrawableBoard);
     }
     if (key == 'Q') {
       // Quit
