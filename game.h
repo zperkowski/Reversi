@@ -9,6 +9,7 @@ const char HORIZONTAL_LINE = 196;
 const char VERTICAL_LINE = 179;
 const char SYMBOL_1 = 'X';
 const char SYMBOL_2 = 'O';
+const char CURSOR = '_';
 const char EMPTY_SPACE = ' ';
 // TODO: Test on Linux
 #elif __linux__
@@ -20,6 +21,7 @@ const char HORIZONTAL_LINE = 196;
 const char VERTICAL_LINE = 179;
 const char SYMBOL_1 = 'X';
 const char SYMBOL_2 = 'O';
+const char CURSOR = '_';
 const char EMPTY_SPACE = ' ';
 
 #else // For macOS
@@ -31,6 +33,7 @@ const char HORIZONTAL_LINE = '-';
 const char VERTICAL_LINE = '|';
 const char SYMBOL_1 = 'X';
 const char SYMBOL_2 = 'O';
+const char CURSOR = '_';
 const char EMPTY_SPACE = ' ';
 #endif
 
@@ -38,7 +41,12 @@ extern char player1_name[16];
 extern char player2_name[16];
 extern int mapSizeInt;
 extern char mapSizeString[3];
-int i, j;
+
+int currentPlayer;
+int cursorX;
+int cursorY;
+
+int i, j, x, y;
 
 int** initBoard() {
   int **board = (int**)calloc(mapSizeInt, sizeof(int*));
@@ -52,6 +60,11 @@ int** initBoard() {
   //Initial second player's symbols
   board[mapSizeInt/2][mapSizeInt/2] = 2;
   board[(mapSizeInt/2)-1][(mapSizeInt/2)-1] = 2;
+
+  currentPlayer = 1;
+  cursorX = 3;
+  cursorY = 1;
+
   return board;
 }
 
@@ -91,7 +104,6 @@ char** initDrawableBoard(int **board) {
 
   for (i = 0; i < mapSizeInt; i++) {
     for (j = 0; j < mapSizeInt; j++) {
-      printf("i: %d j: %d\n", i, j);
       if (board[i][j] == 1) {
         drawableBoard[(i*2)+1][(j*2)+1] = SYMBOL_1;
       } else if (board[i][j] == 2) {
@@ -99,6 +111,8 @@ char** initDrawableBoard(int **board) {
       }
     }
   }
+
+  drawableBoard[(cursorY*2)+1][(cursorX*2)+1] = CURSOR;
 
   return drawableBoard;
 }
@@ -121,6 +135,92 @@ void drawBoard(char **board) {
   }
 }
 
+void moveUp(int **board) {
+  // Moves up or stops when in the next step cursorY will be outside the board
+  for (y = 0; (cursorY-y) > 0; y++) {
+    // First checks if there's free space directly above previous step
+    if (board[cursorY-(y+1)][cursorX] == 0) {
+      cursorY -= (y+1);
+      break;
+    } else {
+      // If there isn't, looks for a free field in triangle shape
+      // 1, 3, 5, 7 fields in the width
+      for (x = cursorX-y-1; y < (cursorX-y-1)+(1+(y*2)); x++) {
+        // When is out of range continues looking for other fields
+        if (x < 0 || x >= mapSizeInt) {
+          continue;
+        }
+        // When finds a free field, changes the cursor coordinates
+        if (board[y][x] == 0) {
+          cursorX = x;
+          cursorY = y;
+          break;
+        }
+      }
+    }
+  }
+}
+
+void moveDown(int **board) {
+  for (y = 0; (cursorY+y) < mapSizeInt-1; y++) {
+    printf("y: %d cursorY: %d\n", y, cursorY);
+    if (board[cursorY+(y+1)][cursorX] == 0) {
+      cursorY += (y+1);
+      break;
+    } else {
+      for (x = cursorX-y-1; y < (cursorX-y-1)+(1+(y*2)); x++) {
+        if (x < 0 || x >= mapSizeInt) {
+          continue;
+        }
+        if (board[y][x] == 0) {
+          cursorX = x;
+          cursorY = y;
+          break;
+        }
+      }
+    }
+  }
+}
+
+void moveLeft(int **board) {
+  for (x = 0; (cursorX-x) > 0; x++) {
+    if (board[cursorX-(x+1)][cursorY] == 0) {
+      cursorX -= (x+1);
+      break;
+    } else {
+      for (y = cursorY-x-1; x < (cursorY-x-1)+(1+(x*2)); y++) {
+        if (y < 0 || y >= mapSizeInt) {
+          continue;
+        }
+        if (board[y][x] == 0) {
+          cursorX = x;
+          cursorY = y;
+          break;
+        }
+      }
+    }
+  }
+}
+
+void moveRight(int **board) {
+  for (x = 0; (cursorX+x) < mapSizeInt-1; x++) {
+    if (board[cursorX+(x+1)][cursorY] == 0) {
+      cursorX += (x+1);
+      break;
+    } else {
+      for (y = cursorY-x-1; x < (cursorY-x-1)+(1+(x*2)); y++) {
+        if (y < 0 || y >= mapSizeInt) {
+          continue;
+        }
+        if (board[y][x] == 0) {
+          cursorX = x;
+          cursorY = y;
+          break;
+        }
+      }
+    }
+  }
+}
 
 void playReversi() {
   int **reversiBoard = initBoard();
@@ -130,29 +230,28 @@ void playReversi() {
   while((key = readKey())) {
     switch (key) {
       case 'U': // Up
-
+        moveUp(reversiBoard);
         break;
       case 'D': // Down
-
+        moveDown(reversiBoard);
         break;
       case 'R': // Right
-
+        moveRight(reversiBoard);
         break;
       case 'L': // Left
-
+        moveLeft(reversiBoard);
         break;
       case 'E': // Enter
       case 'S': // Space
 
         break;
-     default:
-        reversiDrawableBoard = initDrawableBoard(reversiBoard);
-        drawBoard(reversiDrawableBoard);
     }
     if (key == 'Q') {
       // Quit
       break;
     }
+   reversiDrawableBoard = initDrawableBoard(reversiBoard);
+   drawBoard(reversiDrawableBoard);
   }
   deleteBoard(reversiBoard);
   deleteDrawableBoard(reversiDrawableBoard);
