@@ -42,11 +42,37 @@ extern char player2_name[16];
 extern int mapSizeInt;
 extern char mapSizeString[3];
 
+int **reversiBoard;
+char **reversiDrawableBoard;
+
 int currentPlayer;
 int cursorX;
 int cursorY;
 
 int i, j, x, y;
+
+int setCursor() {
+  int middleOfBoard = mapSizeInt/2;
+  for (x = 0; x <= (mapSizeInt/2); x++) {
+    for (y = 0; y <= (mapSizeInt/2); y++) {
+      printf("x: %d y: %d\n", x, y);
+      if ((x > 0 || x < mapSizeInt) && (y > 0 || y < mapSizeInt)) {
+        if (reversiBoard[middleOfBoard-y][middleOfBoard-x] == 0) {
+          printf("1\n");
+          cursorY = middleOfBoard-y;
+          cursorX = middleOfBoard-x;
+          return 0;
+        } else if (reversiBoard[middleOfBoard+y][middleOfBoard+x] == 0) {
+          printf("2\n");
+          cursorY = middleOfBoard+y;
+          cursorX = middleOfBoard+x;
+          return 0;
+        }
+      }
+    }
+  }
+  return 1;
+}
 
 int** initBoard() {
   int **board = (int**)calloc(mapSizeInt, sizeof(int*));
@@ -62,8 +88,6 @@ int** initBoard() {
   board[(mapSizeInt/2)-1][(mapSizeInt/2)-1] = 2;
 
   currentPlayer = 1;
-  cursorX = 3;
-  cursorY = 1;
 
   return board;
 }
@@ -223,8 +247,9 @@ void moveRight(int **board) {
 }
 
 void playReversi() {
-  int **reversiBoard = initBoard();
-  char **reversiDrawableBoard = initDrawableBoard(reversiBoard);
+  reversiBoard = initBoard();
+  setCursor();
+  reversiDrawableBoard = initDrawableBoard(reversiBoard);
   drawBoard(reversiDrawableBoard);
   char key;
   while((key = readKey())) {
