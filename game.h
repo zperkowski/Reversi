@@ -46,26 +46,22 @@ int **reversiBoard;
 char **reversiDrawableBoard;
 
 int currentPlayer;
-int cursorX;
-int cursorY;
+int cursorX = 0;
+int cursorY = 0;;
 
 int i, j, x, y;
 
 int setCursor() {
-  int middleOfBoard = mapSizeInt/2;
-  for (x = 0; x <= (mapSizeInt/2); x++) {
-    for (y = 0; y <= (mapSizeInt/2); y++) {
-      printf("x: %d y: %d\n", x, y);
-      if ((x > 0 || x < mapSizeInt) && (y > 0 || y < mapSizeInt)) {
-        if (reversiBoard[middleOfBoard-y][middleOfBoard-x] == 0) {
-          printf("1\n");
-          cursorY = middleOfBoard-y;
-          cursorX = middleOfBoard-x;
+  for (x = 0; x < mapSizeInt; x++) {
+    for (y = 0; y < mapSizeInt; y++) {
+      if (abs(cursorX-x) >= 0 && cursorX+x < mapSizeInt && abs(cursorY-y) >= 0 && cursorY+y < mapSizeInt) {
+        if (reversiBoard[abs(cursorY-y)][abs(cursorX-x)] == 0) {
+          cursorY = abs(cursorY-y);
+          cursorX = abs(cursorX-x);
           return 0;
-        } else if (reversiBoard[middleOfBoard+y][middleOfBoard+x] == 0) {
-          printf("2\n");
-          cursorY = middleOfBoard+y;
-          cursorX = middleOfBoard+x;
+        } else if (reversiBoard[cursorY+y][cursorX+x] == 0) {
+          cursorY = cursorY+y;
+          cursorX = cursorX+x;
           return 0;
         }
       }
@@ -187,7 +183,6 @@ void moveUp(int **board) {
 
 void moveDown(int **board) {
   for (y = 0; (cursorY+y) < mapSizeInt-1; y++) {
-    printf("y: %d cursorY: %d\n", y, cursorY);
     if (board[cursorY+(y+1)][cursorX] == 0) {
       cursorY += (y+1);
       break;
@@ -246,11 +241,53 @@ void moveRight(int **board) {
   }
 }
 
+void displayScore(int **board) {
+  int p1_score = 0, p2_score = 0;
+  char p1_score_str[2];
+  char p2_score_str[2];
+  char p1_output[26];
+  char p2_output[26];
+
+  for (i = 0; i < mapSizeInt; i++) {
+    for (j = 0; j < mapSizeInt; j++) {
+      if (board[i][j] == 1) {
+        p1_score++;
+      } else if (board[i][j] == 2) {
+        p2_score++;
+      }
+    }
+  }
+
+  sprintf(p1_score_str, "%d", p1_score);
+  sprintf(p2_score_str, "%d", p2_score);
+  snprintf(p1_output, sizeof p1_output, "%s score: %s", player1_name, p1_score_str);
+  snprintf(p2_output, sizeof p2_output, "%s score: %s", player2_name, p2_score_str);
+  printCentered(p1_output);
+  printCentered(p2_output);
+}
+
+int isInsertionAllowed() {
+  return 1;
+}
+
+void insertPiece() {
+  if (isInsertionAllowed()) {
+    reversiBoard[cursorY][cursorX] = currentPlayer;
+    setCursor();
+    if (currentPlayer == 1) {
+      currentPlayer = 2;
+    } else if (currentPlayer == 2) {
+      currentPlayer = 1;
+    }
+  }
+}
+
 void playReversi() {
   reversiBoard = initBoard();
   setCursor();
   reversiDrawableBoard = initDrawableBoard(reversiBoard);
   drawBoard(reversiDrawableBoard);
+  displayScore(reversiBoard);
   char key;
   while((key = readKey())) {
     switch (key) {
@@ -268,7 +305,7 @@ void playReversi() {
         break;
       case 'E': // Enter
       case 'S': // Space
-
+        insertPiece();
         break;
     }
     if (key == 'Q') {
@@ -277,6 +314,7 @@ void playReversi() {
     }
    reversiDrawableBoard = initDrawableBoard(reversiBoard);
    drawBoard(reversiDrawableBoard);
+   displayScore(reversiBoard);
   }
   deleteBoard(reversiBoard);
   deleteDrawableBoard(reversiDrawableBoard);
