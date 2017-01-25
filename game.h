@@ -268,13 +268,13 @@ void displayScore(int **board) {
 
 int checkN() {
   int otherPlayerPiecesBetween = 0;
-  for (i = 1; i < mapSizeInt-cursorY; i++) {
-    if (reversiBoard[abs(cursorY-i)][cursorX] != currentPlayer) {
+  for (i = cursorY-1; i >= 0; i--) {
+    if (reversiBoard[i][cursorX] != currentPlayer) {
       otherPlayerPiecesBetween++;
     }
-    if (reversiBoard[abs(cursorY-i)][cursorX] == currentPlayer &&
+    if (reversiBoard[i][cursorX] == currentPlayer &&
           otherPlayerPiecesBetween > 0) {
-      for (j = abs(cursorY-i); j < cursorY; j++) {
+      for (j = i; j < cursorY; j++) {
           reversiBoard[j][cursorX] = currentPlayer;
       }
       return 1;
@@ -297,13 +297,13 @@ return 0;
 
 int checkS() {
   int otherPlayerPiecesBetween = 0;
-  for (i = 1; i < mapSizeInt-cursorY; i++) {
-    if (reversiBoard[cursorY+i][cursorX] != currentPlayer) {
+  for (i = cursorY+1; i < mapSizeInt; i++) {
+    if (reversiBoard[i][cursorX] != currentPlayer) {
       otherPlayerPiecesBetween++;
     }
-    if (reversiBoard[cursorY+i][cursorX] == currentPlayer &&
+    if (reversiBoard[i][cursorX] == currentPlayer &&
           otherPlayerPiecesBetween > 0) {
-      for (j = cursorY+i; j > cursorY; j--) {
+      for (j = i; j > cursorY; j--) {
           reversiBoard[j][cursorX] = currentPlayer;
       }
       return 1;
