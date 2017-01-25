@@ -284,7 +284,20 @@ int checkN() {
 }
 
 int checkNE() {
-return 0;
+  int otherPlayerPiecesBetween = 0;
+  for (x = cursorX+1, y = cursorY-1; x < mapSizeInt && y >= 0 ; x++, y--) {
+    if (reversiBoard[y][x] != currentPlayer) {
+      otherPlayerPiecesBetween++;
+    }
+    if (reversiBoard[y][x] == currentPlayer &&
+          otherPlayerPiecesBetween > 0) {
+      for (i = x, j = y; i > cursorX && j < cursorY; i--, j++) {
+          reversiBoard[j][i] = currentPlayer;
+      }
+      return 1;
+    }
+  }
+  return 0;
 }
 
 int checkE() {
@@ -305,7 +318,20 @@ int checkE() {
 }
 
 int checkSE() {
-return 0;
+  int otherPlayerPiecesBetween = 0;
+  for (x = cursorX+1, y = cursorY+1; x < mapSizeInt && y < mapSizeInt; x++, y++) {
+    if (reversiBoard[y][x] != currentPlayer) {
+      otherPlayerPiecesBetween++;
+    }
+    if (reversiBoard[y][x] == currentPlayer &&
+          otherPlayerPiecesBetween > 0) {
+      for (i = x, j = y; i > cursorX && j > cursorY; i--, j--) {
+          reversiBoard[j][i] = currentPlayer;
+      }
+      return 1;
+    }
+  }
+  return 0;
 }
 
 int checkS() {
@@ -326,7 +352,20 @@ int checkS() {
 }
 
 int checkSW() {
-return 0;
+  int otherPlayerPiecesBetween = 0;
+  for (x = cursorX-1, y = cursorY+1; x >= 0 && y < mapSizeInt; x--, y++) {
+    if (reversiBoard[y][x] != currentPlayer) {
+      otherPlayerPiecesBetween++;
+    }
+    if (reversiBoard[y][x] == currentPlayer &&
+          otherPlayerPiecesBetween > 0) {
+      for (i = x, j = y; i < cursorX && j > cursorY; i++, j--) {
+          reversiBoard[j][i] = currentPlayer;
+      }
+      return 1;
+    }
+  }
+  return 0;
 }
 
 int checkW() {
@@ -347,7 +386,20 @@ int checkW() {
 }
 
 int checkNW() {
-return 0;
+  int otherPlayerPiecesBetween = 0;
+  for (x = cursorX-1, y = cursorY-1; x >= 0 && y >= 0 ; x--, y--) {
+    if (reversiBoard[y][x] != currentPlayer) {
+      otherPlayerPiecesBetween++;
+    }
+    if (reversiBoard[y][x] == currentPlayer &&
+          otherPlayerPiecesBetween > 0) {
+      for (i = x, j = y; i < cursorX && j < cursorY; i++, j++) {
+          reversiBoard[j][i] = currentPlayer;
+      }
+      return 1;
+    }
+  }
+  return 0;
 }
 
 int isInsertionAllowed() {
