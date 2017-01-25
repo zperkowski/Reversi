@@ -288,7 +288,20 @@ return 0;
 }
 
 int checkE() {
-return 0;
+  int otherPlayerPiecesBetween = 0;
+  for (i = cursorX+1; i < mapSizeInt; i++) {
+    if (reversiBoard[cursorY][i] != currentPlayer) {
+      otherPlayerPiecesBetween++;
+    }
+    if (reversiBoard[cursorY][i] == currentPlayer &&
+          otherPlayerPiecesBetween > 0) {
+      for (j = i; j > cursorX; j--) {
+          reversiBoard[cursorY][j] = currentPlayer;
+      }
+      return 1;
+    }
+  }
+  return 0;
 }
 
 int checkSE() {
@@ -317,7 +330,20 @@ return 0;
 }
 
 int checkW() {
-return 0;
+  int otherPlayerPiecesBetween = 0;
+  for (i = cursorX-1; i >= 0; i--) {
+    if (reversiBoard[cursorY][i] != currentPlayer) {
+      otherPlayerPiecesBetween++;
+    }
+    if (reversiBoard[cursorY][i] == currentPlayer &&
+          otherPlayerPiecesBetween > 0) {
+      for (j = i; j < cursorX; j++) {
+          reversiBoard[cursorY][j] = currentPlayer;
+      }
+      return 1;
+    }
+  }
+  return 0;
 }
 
 int checkNW() {
