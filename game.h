@@ -47,7 +47,7 @@ char **reversiDrawableBoard;
 
 int currentPlayer;
 int cursorX = 0;
-int cursorY = 0;;
+int cursorY = 0;
 
 int i, j, x, y;
 
@@ -260,14 +260,100 @@ void displayScore(int **board) {
 
   sprintf(p1_score_str, "%d", p1_score);
   sprintf(p2_score_str, "%d", p2_score);
-  snprintf(p1_output, sizeof p1_output, "%s score: %s", player1_name, p1_score_str);
-  snprintf(p2_output, sizeof p2_output, "%s score: %s", player2_name, p2_score_str);
+  snprintf(p1_output, sizeof p1_output, "%c %s score: %s", SYMBOL_1, player1_name, p1_score_str);
+  snprintf(p2_output, sizeof p2_output, "%c %s score: %s", SYMBOL_2, player2_name, p2_score_str);
   printCentered(p1_output);
   printCentered(p2_output);
 }
 
+int checkN() {
+  int otherPlayerPiecesBetween = 0;
+  for (i = 1; i < mapSizeInt-cursorY; i++) {
+    if (reversiBoard[abs(cursorY-i)][cursorX] != currentPlayer) {
+      otherPlayerPiecesBetween++;
+    }
+    if (reversiBoard[abs(cursorY-i)][cursorX] == currentPlayer &&
+          otherPlayerPiecesBetween > 0) {
+      for (j = abs(cursorY-i); j < cursorY; j++) {
+          reversiBoard[j][cursorX] = currentPlayer;
+      }
+      return 1;
+    }
+  }
+  return 0;
+}
+
+int checkNE() {
+return 0;
+}
+
+int checkE() {
+return 0;
+}
+
+int checkSE() {
+return 0;
+}
+
+int checkS() {
+  int otherPlayerPiecesBetween = 0;
+  for (i = 1; i < mapSizeInt-cursorY; i++) {
+    if (reversiBoard[cursorY+i][cursorX] != currentPlayer) {
+      otherPlayerPiecesBetween++;
+    }
+    if (reversiBoard[cursorY+i][cursorX] == currentPlayer &&
+          otherPlayerPiecesBetween > 0) {
+      for (j = cursorY+i; j > cursorY; j--) {
+          reversiBoard[j][cursorX] = currentPlayer;
+      }
+      return 1;
+    }
+  }
+  return 0;
+}
+
+int checkSW() {
+return 0;
+}
+
+int checkW() {
+return 0;
+}
+
+int checkNW() {
+return 0;
+}
+
 int isInsertionAllowed() {
-  return 1;
+  // Contains how many ways the move affected the board
+  int correctMove = 0;
+
+  if (checkN()) {
+    correctMove++;
+  }
+  if (checkNE()) {
+    correctMove++;
+  }
+  if (checkE()) {
+    correctMove++;
+  }
+  if (checkSE()) {
+    correctMove++;
+  }
+  if (checkS()) {
+    correctMove++;
+  }
+  if (checkSW()) {
+    correctMove++;
+  }
+  if (checkW()) {
+    correctMove++;
+  }
+  if (checkNW()) {
+    correctMove++;
+  }
+
+  return correctMove;
 }
 
 void insertPiece() {
