@@ -260,16 +260,25 @@ void displayScore(int **board) {
 
   sprintf(p1_score_str, "%d", p1_score);
   sprintf(p2_score_str, "%d", p2_score);
-  snprintf(p1_output, sizeof p1_output, "%c %s score: %s", SYMBOL_1, player1_name, p1_score_str);
-  snprintf(p2_output, sizeof p2_output, "%c %s score: %s", SYMBOL_2, player2_name, p2_score_str);
+  if (currentPlayer == 1) {
+    snprintf(p1_output, sizeof p1_output, "-> %c %s score: %s", SYMBOL_1, player1_name, p1_score_str);
+    snprintf(p2_output, sizeof p2_output, "  %c %s score: %s", SYMBOL_2, player2_name, p2_score_str);
+  } else if (currentPlayer == 2) {
+    snprintf(p1_output, sizeof p1_output, "  %c %s score: %s", SYMBOL_1, player1_name, p1_score_str);
+    snprintf(p2_output, sizeof p2_output, "-> %c %s score: %s", SYMBOL_2, player2_name, p2_score_str);
+  }
   printCentered(p1_output);
   printCentered(p2_output);
 }
 
 int checkN() {
   int otherPlayerPiecesBetween = 0;
-  for (i = cursorY-1; i >= 0; i--) {
-    if (reversiBoard[i][cursorX] != currentPlayer) {
+  int firstLoop = 0;
+  for (i = cursorY-1; i >= 0; i--, firstLoop++) {
+    if ((reversiBoard[i][cursorX] == currentPlayer ||
+        reversiBoard[i][cursorX] == 0) && firstLoop == 0) {
+      return 0;
+    } else if (reversiBoard[i][cursorX] != currentPlayer) {
       otherPlayerPiecesBetween++;
     }
     if (reversiBoard[i][cursorX] == currentPlayer &&
@@ -285,8 +294,12 @@ int checkN() {
 
 int checkNE() {
   int otherPlayerPiecesBetween = 0;
-  for (x = cursorX+1, y = cursorY-1; x < mapSizeInt && y >= 0 ; x++, y--) {
-    if (reversiBoard[y][x] != currentPlayer) {
+  int firstLoop = 0;
+  for (x = cursorX+1, y = cursorY-1; x < mapSizeInt && y >= 0 ; x++, y--, firstLoop++) {
+    if ((reversiBoard[y][x] == currentPlayer ||
+        reversiBoard[y][x] == 0) && firstLoop == 0) {
+      return 0;
+    } else if (reversiBoard[y][x] != currentPlayer) {
       otherPlayerPiecesBetween++;
     }
     if (reversiBoard[y][x] == currentPlayer &&
@@ -302,8 +315,12 @@ int checkNE() {
 
 int checkE() {
   int otherPlayerPiecesBetween = 0;
-  for (i = cursorX+1; i < mapSizeInt; i++) {
-    if (reversiBoard[cursorY][i] != currentPlayer) {
+  int firstLoop = 0;
+  for (i = cursorX+1; i < mapSizeInt; i++, firstLoop++) {
+    if ((reversiBoard[cursorY][i] == currentPlayer ||
+        reversiBoard[cursorY][i] == 0) && firstLoop == 0) {
+      return 0;
+    } if (reversiBoard[cursorY][i] != currentPlayer) {
       otherPlayerPiecesBetween++;
     }
     if (reversiBoard[cursorY][i] == currentPlayer &&
@@ -319,8 +336,12 @@ int checkE() {
 
 int checkSE() {
   int otherPlayerPiecesBetween = 0;
-  for (x = cursorX+1, y = cursorY+1; x < mapSizeInt && y < mapSizeInt; x++, y++) {
-    if (reversiBoard[y][x] != currentPlayer) {
+  int firstLoop = 0;
+  for (x = cursorX+1, y = cursorY+1; x < mapSizeInt && y < mapSizeInt; x++, y++, firstLoop++) {
+    if ((reversiBoard[y][x] == currentPlayer ||
+        reversiBoard[y][x] == 0) && firstLoop == 0) {
+      return 0;
+    } if (reversiBoard[y][x] != currentPlayer) {
       otherPlayerPiecesBetween++;
     }
     if (reversiBoard[y][x] == currentPlayer &&
@@ -336,8 +357,12 @@ int checkSE() {
 
 int checkS() {
   int otherPlayerPiecesBetween = 0;
-  for (i = cursorY+1; i < mapSizeInt; i++) {
-    if (reversiBoard[i][cursorX] != currentPlayer) {
+  int firstLoop = 0;
+  for (i = cursorY+1; i < mapSizeInt; i++, firstLoop++) {
+    if ((reversiBoard[i][cursorX] == currentPlayer ||
+        reversiBoard[i][cursorX] == 0) && firstLoop == 0) {
+      return 0;
+    } if (reversiBoard[i][cursorX] != currentPlayer) {
       otherPlayerPiecesBetween++;
     }
     if (reversiBoard[i][cursorX] == currentPlayer &&
@@ -353,8 +378,12 @@ int checkS() {
 
 int checkSW() {
   int otherPlayerPiecesBetween = 0;
-  for (x = cursorX-1, y = cursorY+1; x >= 0 && y < mapSizeInt; x--, y++) {
-    if (reversiBoard[y][x] != currentPlayer) {
+  int firstLoop = 0;
+  for (x = cursorX-1, y = cursorY+1; x >= 0 && y < mapSizeInt; x--, y++, firstLoop++) {
+    if ((reversiBoard[y][x] == currentPlayer ||
+        reversiBoard[y][x] == 0) && firstLoop == 0) {
+      return 0;
+    } if (reversiBoard[y][x] != currentPlayer) {
       otherPlayerPiecesBetween++;
     }
     if (reversiBoard[y][x] == currentPlayer &&
@@ -370,8 +399,12 @@ int checkSW() {
 
 int checkW() {
   int otherPlayerPiecesBetween = 0;
-  for (i = cursorX-1; i >= 0; i--) {
-    if (reversiBoard[cursorY][i] != currentPlayer) {
+  int firstLoop = 0;
+  for (i = cursorX-1; i >= 0; i--, firstLoop++) {
+    if ((reversiBoard[cursorY][i] == currentPlayer ||
+        reversiBoard[cursorY][i] == 0) && firstLoop == 0) {
+      return 0;
+    } if (reversiBoard[cursorY][i] != currentPlayer) {
       otherPlayerPiecesBetween++;
     }
     if (reversiBoard[cursorY][i] == currentPlayer &&
@@ -387,8 +420,12 @@ int checkW() {
 
 int checkNW() {
   int otherPlayerPiecesBetween = 0;
-  for (x = cursorX-1, y = cursorY-1; x >= 0 && y >= 0 ; x--, y--) {
-    if (reversiBoard[y][x] != currentPlayer) {
+  int firstLoop = 0;
+  for (x = cursorX-1, y = cursorY-1; x >= 0 && y >= 0 ; x--, y--, firstLoop++) {
+    if ((reversiBoard[y][x] == currentPlayer ||
+        reversiBoard[y][x] == 0) && firstLoop == 0) {
+      return 0;
+    } if (reversiBoard[y][x] != currentPlayer) {
       otherPlayerPiecesBetween++;
     }
     if (reversiBoard[y][x] == currentPlayer &&
@@ -403,7 +440,7 @@ int checkNW() {
 }
 
 int isInsertionAllowed() {
-  // Contains how many ways the move affected the board
+  // Contains in how many ways the move affects the board
   int correctMove = 0;
 
   if (checkN()) {
@@ -434,8 +471,20 @@ int isInsertionAllowed() {
   return correctMove;
 }
 
+int isBoardFull() {
+  for (i = 0; i < mapSizeInt; i++) {
+    for (j = 0; j < mapSizeInt; j++) {
+      if (reversiBoard[i][j] == 0) {
+        return 0;
+      }
+    }
+  }
+  printCentered("GAME OVER");
+  return 1;
+}
+
 void insertPiece() {
-  if (isInsertionAllowed()) {
+  if (!isBoardFull() && isInsertionAllowed()) {
     reversiBoard[cursorY][cursorX] = currentPlayer;
     setCursor();
     if (currentPlayer == 1) {

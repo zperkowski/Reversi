@@ -9,16 +9,16 @@ extern char mapSizeString[];
 
 struct windowSize windowSize;
 
-char *menu_play_unmarked = "[ ] Play";
-char *menu_play_marked = "[X] Play";
+char *menu_play_unmarked = "[ ]  Play     ";
+char *menu_play_marked = "[X]  Play     ";
 char *menu_player1_unmarked = "[ ] Player 1: ";
 char *menu_player1_marked = "[X] Player 1: ";
 char *menu_player2_unmarked = "[ ] Player 2: ";
 char *menu_player2_marked = "[X] Player 2: ";
 char *menu_mapSize_unmarked = "[ ] Map size: ";
 char *menu_mapSize_marked = "[X] Map size: ";
-char *menu_exit_unmarked = "[ ] Exit";
-char *menu_exit_marked = "[X] Exit";
+char *menu_exit_unmarked = "[ ]  Exit     ";
+char *menu_exit_marked = "[X]  Exit     ";
 
 // Describes where the cursor in the menu() is set.
 int option_marked = 0;

@@ -1,6 +1,9 @@
 #include "menu.h"
 #include "game.h"
-
+/**
+* @author Zdzisław Perkowski
+* @version 1.0
+*/
 char player1_name[16] = "Player 1";
 char player2_name[16] = "Player 2";
 int mapSizeInt = 4;
