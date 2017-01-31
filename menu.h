@@ -151,20 +151,23 @@ void nameChanger(int playerNumber, char *playerName) {
   int c;
   while ((c = getchar()) != EOF && c != '\n');
 }
-// TODO: mapSizeChanger doens't work on macOS
+// TODO: mapSizeChanger doesn't work on macOS
 void mapSizeChanger() {
   scr_clr();
   int tempMapSize;
   do {
     tempMapSize = 0;
     printCentered("Choose map size");
-    printCentered("Write a digit between 4 and 20");
+    printCentered("Write an even digit between 4 and 20");
     scanf("%d", &tempMapSize);
+    if (tempMapSize %2 != 0) {
+        tempMapSize = 0;
+    }
   } while ((tempMapSize < 4) || (tempMapSize > 20));
   mapSizeInt = tempMapSize;
   #ifdef _WIN32
   itoa(mapSizeInt, mapSizeString, 10);
-  #elif __linux__
+  #else
   sprintf(mapSizeString, "%d", mapSizeInt);
   int c;
   while ((c = getchar()) != EOF && c != '\n');
