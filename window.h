@@ -24,6 +24,26 @@ struct windowSize windowSize;
     return window;
   }
 
+  char readKey() {
+    switch (getch()) {
+      case 72:
+        return 'U';
+      case 80:
+        return 'D';
+      case 77:
+        return 'R';
+      case 75:
+        return 'L';
+      case '\r':
+        return 'E';
+      case ' ':
+        return 'S';
+      case 'q':
+      case 'Q':
+        return 'Q';
+    }
+    return '0';
+  }
 #else // For Linux or macOS
   #include <termios.h>
   #include <sys/ioctl.h>
@@ -56,8 +76,6 @@ struct windowSize windowSize;
       tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
       return ch;
   }
-// TODO: Test readKey on Linux
-// TODO: Write readKey for Windows
   char readKey() {
     char input;
       input = getch();
@@ -91,8 +109,8 @@ struct windowSize windowSize;
 */
 void scr_clr() {
   windowSize = getWindowSize();
-  for (i = 0; i < (windowSize.width*windowSize.height); i++) {
-    printf(" ");
+  for (i = 0; i < (windowSize.height); i++) {
+    printf("\n");
   }
 }
 
