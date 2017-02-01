@@ -91,16 +91,17 @@ void drawMenu() {
     option_choosen = 0;
     while (option_choosen == 0) {
       drawMenu();
-      switch (getch()) {
-        case 72:
+      switch (readKey()) {
+        case 'U':
           if (option_marked > 0)
             option_marked--;
           break;
-        case 80:
+        case 'D':
           if (option_marked < 4)
             option_marked++;
           break;
-        case '\r':
+        case 'S':
+        case 'E':
           option_choosen = 1;
           break;
       }
@@ -146,12 +147,12 @@ void nameChanger(int playerNumber, char *playerName) {
     printCentered(player2_name);
   }
   printCentered("(Maximum length: 15)");
-  scanf("%15s", playerName);
-  // Clear a excess of the input
-  int c;
-  while ((c = getchar()) != EOF && c != '\n');
+  fgets (playerName, 16, stdin);
+  /* Remove trailing newline, if there. */
+  if ((strlen(playerName)>0) && (playerName[strlen (playerName) - 1] == '\n'))
+      playerName[strlen (playerName) - 1] = '\0';
 }
-// TODO: mapSizeChanger doesn't work on macOS
+
 void mapSizeChanger() {
   scr_clr();
   int tempMapSize;
