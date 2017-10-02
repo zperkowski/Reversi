@@ -17,7 +17,7 @@ In the game you can:
 What things you need to install:
 
 ```
-gcc 6.3 or newer
+gcc 4.9 or newer
 ```
 
 ### Installing and running
